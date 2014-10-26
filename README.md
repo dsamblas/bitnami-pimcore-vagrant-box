@@ -16,9 +16,9 @@ Inside the Box is
 - Ubuntu 14.04LTS 64bits
 - Apache 2.4
 - PHP 5.4.34
-- MySQL 5.1.56
-- phpMyAdmin 2.11.11.3
-- libmcrypt 1.2.8
+- MySQL 5.5
+- phpMyAdmin 4.2.9.1 (TODO)
+- libmcrypt 4.4.8
 
 
 ## How to install
@@ -35,7 +35,7 @@ Inside the Box is
 
     vagrant up
 
-After this wait while the puppet provisioning your vagrant server. When it is done your can deploy on the machine any php app root  will be located into `bitnami-lamp-vagrant-box/www`.
+After this wait while the puppet provisioning your vagrant server. When it is done your can deploy on the machine any php app. Webroot  will be located into `bitnami-lamp-vagrant-box/www`.
 
 ## Box Details
 
@@ -46,7 +46,7 @@ user: root
 password: avanti
 
 
-### PhpMyAdmin
+### PhpMyAdmin (TODO)
 access via http://33.33.33.111/phpmyadmin/
 
 No password required

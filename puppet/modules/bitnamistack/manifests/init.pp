@@ -1,12 +1,10 @@
 class bitnamistack inherits bitnamistack::params {
 
     include mysql::params
-    include wordpress::params
 
     # template vars
     $stack_full_path = $bitnamistack::params::stack_full_path
     $dbuserpass = $mysql::params::dbuserpass
-    $wp_install_dirname = $wordpress::params::install_dirname
 
 
     file { 'answer_file':
@@ -14,12 +12,41 @@ class bitnamistack inherits bitnamistack::params {
         ensure => present,
         content => template('bitnamistack/answer_file.erb'),
     }
+    exec {
+      "upgrade-swap-1":
+        command =>"swapoff -a",
+        subscribe => File['answer_file']
 
+    }
+  exec {
+    "upgrade-swap-2":
+      command =>"dd if=/dev/zero of=/mnt/swap.0 bs=1024 count=2148576",
+      subscribe => Exec['upgrade-swap-1']
+
+  }
+  exec {
+    "upgrade-swap-3":
+      command =>"mkswap /mnt/swap.0",
+      subscribe => Exec['upgrade-swap-2']
+
+  }
+  exec {
+    "upgrade-swap-4":
+      command =>'echo "/mnt/swap.0 swap swap defaults 0 0" >> /etc/fstab',
+      subscribe => Exec['upgrade-swap-3']
+
+  }
+  exec {
+    "enable-swap":
+      command =>'swapon -a -e || /bin/true',
+      subscribe => Exec['upgrade-swap-4']
+
+  }
     exec {
         "bitnami-lampstack":
-        command => "wget -P /home/vagrant $bitnamistack::params::download_install_path",
-        creates => "/home/vagrant/$bitnamistack::params::install_file",
-        subscribe => File['answer_file']
+          command => "wget -P /home/vagrant $bitnamistack::params::download_install_path",
+          creates => "/home/vagrant/$bitnamistack::params::install_file",
+          subscribe => Exec['enable-swap']
     }
 
     exec {
@@ -56,7 +83,6 @@ class bitnamistack inherits bitnamistack::params {
         subscribe => Exec['stop-lamp'],
         ensure => present
     }
-
 
     exec {
         "start-up":

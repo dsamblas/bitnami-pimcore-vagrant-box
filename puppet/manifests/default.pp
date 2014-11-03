@@ -5,7 +5,3 @@ Exec
 }
 
 include bitnamistack
-
-include mysql
-
-include other

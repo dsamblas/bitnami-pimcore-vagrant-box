@@ -38,6 +38,12 @@ Inside the Box is
 
 After this wait while the puppet provisioning your vagrant server. 
 
+When proccess ends . then you can put in your browser http://33.33.33.111:8080 and the demo pimcore site.
+
+to access the machine 
+    vagrant ssh
+
+the vagrant user is in sudoers, so you have full control of the vm.
 ## Box Details
 
 ### MySQl
